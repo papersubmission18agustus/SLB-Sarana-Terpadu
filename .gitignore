@@ -1,0 +1,16 @@
+#.gitignore for repository root
+.env
+backend/.env
+vendor/
+node_modules/
+composer.phar
+backend/storage/logs/*
+frontend/dist/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
