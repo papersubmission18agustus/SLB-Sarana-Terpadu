@@ -2,26 +2,35 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class LoginRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
-        return ['username' => ['required', 'string', 'max:80'], 'password' => ['required', 'string', 'min:8']];
+        return [
+            'token' => ['nullable', 'string'],
+            'username' => ['nullable', 'string', 'max:80'],
+            'email' => ['nullable', 'email', 'max:255'],
+            'password' => ['nullable', 'string'],
+        ];
+    }
+
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            $token = trim((string) $this->input('token'));
+            $username = trim((string) $this->input('username'));
+            $email = trim((string) $this->input('email'));
+
+            if ($token === '' && $username === '' && $email === '') {
+                $validator->errors()->add('token', 'Token atau username/email wajib diisi.');
+            }
+        });
     }
 }

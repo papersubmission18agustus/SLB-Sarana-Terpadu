@@ -3,15 +3,19 @@ import vue from '@vitejs/plugin-vue'
 import tailwindcss from '@tailwindcss/vite'
 import { VitePWA } from 'vite-plugin-pwa'
 
-const apiBase = process.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000'
+const apiBase = process.env.VITE_API_BASE_URL || 'http://localhost:8000'
 
 export default defineConfig({
   server: {
     host: '0.0.0.0',
-    port: Number(process.env.PORT || 5173),
+    port: 5173,
     proxy: {
-      '/api': apiBase,
-    },
+      '/api': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+        secure: false
+      }
+    }
   },
   preview: {
     host: '0.0.0.0',
